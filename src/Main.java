@@ -5,6 +5,7 @@ public class Main {
     public static void main(String[] args){
         Scanner sc = new Scanner(System.in);
         Agenda agenda = new Agenda();
+        Contato contato;
 
         while (true){
             try{
@@ -29,10 +30,11 @@ public class Main {
                         agenda.adicionarContato(sc);
                         break;
                     case 2: //detalhar contato
-                        if (agenda.buscarContato(sc) == null){
+                        contato = agenda.buscarContato(sc);
+                        if (contato == null){
                             System.out.println("Contato não encontrado!");
                         }else{
-                            agenda.buscarContato(sc).mostarDetalhes();
+                            contato.mostarDetalhes();
                         }
                         break;
                     case 3: //editar contato
