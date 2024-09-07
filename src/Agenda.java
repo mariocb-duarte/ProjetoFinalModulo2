@@ -70,7 +70,7 @@ public class Agenda {
             if(!telefone.isEmpty()){
                 //tem que trasformar isso aqui em uma função eu acho
                 for (Contato c : contatos) {
-                    if (c.getTelefoneContato().trim().equals(contato.getTelefoneContato().trim()) && c.getIdContato() != contato.getIdContato()) {
+                    if (c.getTelefoneContato().trim().equals(telefone) && c.getIdContato() != contato.getIdContato()) {
                         System.out.println("Telefone já cadastrado!");
                         return;
                     }
