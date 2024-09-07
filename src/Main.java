@@ -30,16 +30,13 @@ public class Main {
                         agenda.adicionarContato(sc);
                         break;
                     case 2: //detalhar contato
-                        contato = agenda.buscarContato(sc);
-                        if (contato == null){
-                            System.out.println("Contato não encontrado!");
-                        }else{
-                            contato.mostarDetalhes();
-                        }
+                        agenda.detalharContato(sc);
                         break;
                     case 3: //editar contato
+                        agenda.editarContato(sc);
                         break;
                     case 4: //remover contato
+                        agenda.removerContato(sc);
                         break;
                     case 5: //listar contatos
                         agenda.listarContatos();

@@ -15,8 +15,8 @@ public class ContatoComLinkedIn extends Contato {
     }
 
     @Override
-    public void mostarDetalhes() {
-        super.mostarDetalhes();
+    public void mostrarDetalhes() {
+        super.mostrarDetalhes();
         System.out.println("Linkedin: " + linkedIn);
     }
 
