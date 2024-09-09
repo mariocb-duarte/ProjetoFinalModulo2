@@ -18,10 +18,6 @@ public class Contato {
         return idContato;
     }
 
-    public String getNomeContato() {
-        return nomeContato;
-    }
-
     public void setNomeContato(String nomeContato) {
         this.nomeContato = nomeContato;
     }
@@ -32,10 +28,6 @@ public class Contato {
 
     public void setTelefoneContato(String telefoneContato) {
         this.telefoneContato = telefoneContato;
-    }
-
-    public String getEmailContato() {
-        return emailContato;
     }
 
     public void setEmailContato(String emailContato) {

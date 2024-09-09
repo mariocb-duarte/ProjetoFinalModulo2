@@ -5,7 +5,6 @@ import java.util.Scanner;
 
 public class Agenda {
     ArrayList<Contato> contatos = new ArrayList<>();
-    private int idContato = 0;
     private Scanner scanner = new Scanner(System.in);
 
     public void adicionarContato() {
