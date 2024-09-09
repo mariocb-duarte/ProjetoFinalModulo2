@@ -15,10 +15,6 @@ public class Contato {
         return idContato;
     }
 
-    public void setIdContato(int idContato) {
-        this.idContato = idContato;
-    }
-
     public String getNomeContato() {
         return nomeContato;
     }
@@ -44,7 +40,7 @@ public class Contato {
     }
 
     public void mostrarDetalhes() {
-        System.out.println("Id: " + idContato);
+        System.out.println("\nId: " + idContato);
         System.out.println("Nome: " + nomeContato);
         System.out.println("Telefone: " + telefoneContato);
         System.out.println("Email: " + emailContato);

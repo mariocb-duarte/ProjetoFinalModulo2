@@ -7,37 +7,42 @@ public class Agenda {
     ArrayList<Contato> contatos = new ArrayList<>();
     //mudei aqui pra private
     private int idContato = 0;
+    private Scanner scanner = new Scanner(System.in);
 
-    public void adicionarContato(Scanner scanner) {
+    public void adicionarContato() {
         idContato++;
         System.out.println("Informe o nome do contato:");
         String nome = scanner.nextLine();
         System.out.println("Informe o telefone do contato (apenas números):");
-        String telefone = leNumeroContato(scanner);
-        if(telefone.isEmpty()){
+        String telefone = leNumeroContato();
+        if (telefone.isEmpty()) {
             idContato--;
             return;
         }
         System.out.println("Informe o e-mail do contato:");
         String email = scanner.nextLine();
-        System.out.println("Informe o LinkdIn do contat:");
+        System.out.println("Informe o LinkdIn do contato:");
         String url = scanner.nextLine();
-        //acho que esse new LinkedIn ficou meio estranho, não sei se isso é usual
-        //aqui eu não sei se o ideal seria chamar o outro construtur se não fosse informado LinkedIn
-        ContatoComLinkedIn contato = new ContatoComLinkedIn(idContato, nome, telefone, email, new LinkedIn(url));
+
         for (Contato c : contatos) {
-            if (c.getTelefoneContato().trim().equals(contato.getTelefoneContato().trim())) {
+            if (c.getTelefoneContato().trim().equals(telefone)) {
                 System.out.println("Telefone já cadastrado!");
                 idContato--;
                 return;
             }
         }
-        contatos.add(contato);
+
+        if (url.isBlank()) {
+            Contato contato = new Contato(idContato, nome, telefone, email);
+            contatos.add(contato);
+        } else {
+            ContatoComLinkedIn contatoComLinkedIn = new ContatoComLinkedIn(idContato, nome, telefone, email, new LinkedIn(url));
+            contatos.add(contatoComLinkedIn);
+        }
     }
 
-    public Contato buscarContato(Scanner scanner) {
-        System.out.println("Informe o número do contato que deseja buscar:");
-        String telefone = leNumeroContato(scanner);
+    public Contato buscarContato() {
+        String telefone = leNumeroContato();
         for (Contato c : contatos) {
             if (c.getTelefoneContato().trim().equals(telefone.trim())) {
                 return c;
@@ -46,28 +51,42 @@ public class Agenda {
         return null;
     }
 
-    public void detalharContato(Scanner scanner){
-        Contato contato = buscarContato(scanner);
-        if (contato == null){
+    public boolean isEmpty() {
+        return contatos.isEmpty();
+    }
+
+    public void detalharContato() {
+        if (isEmpty()) {
+            System.out.println("\nAgenda ainda não possui contato adicionado.");
+            return;
+        }
+        System.out.println("Informe o número do contato que deseja buscar:");
+        Contato contato = buscarContato();
+        if (contato == null) {
             System.out.println("Contato não encontrado!");
-        }else{
+        } else {
             contato.mostrarDetalhes();
         }
     }
 
-    public void editarContato(Scanner scanner) {
-        Contato contato = buscarContato(scanner);
-        if (contato == null){
+    public void editarContato() {
+        if (isEmpty()) {
+            System.out.println("\nAgenda ainda não possui contato adicionado.");
+            return;
+        }
+        System.out.println("Informe o número do contato que deseja editar:");
+        Contato contato = buscarContato();
+        if (contato == null) {
             System.out.println("Contato não encontrado!");
-        }else{
+        } else {
             System.out.println("Informe o nome do contato:");
             String nome = scanner.nextLine();
-            if(!nome.isEmpty()){
+            if (!nome.isEmpty()) {
                 contato.setNomeContato(nome);
             }
             System.out.println("Informe o telefone do contato (apenas números):");
-            String telefone = leNumeroContato(scanner);
-            if(!telefone.isEmpty()){
+            String telefone = leNumeroContato();
+            if (!telefone.isEmpty()) {
                 //tem que trasformar isso aqui em uma função eu acho
                 for (Contato c : contatos) {
                     if (c.getTelefoneContato().trim().equals(telefone) && c.getIdContato() != contato.getIdContato()) {
@@ -79,7 +98,7 @@ public class Agenda {
             }
             System.out.println("Informe o e-mail do contato:");
             String email = scanner.nextLine();
-            if(!email.isEmpty()){
+            if (!email.isEmpty()) {
                 contato.setEmailContato(email);
             }
             if (contato instanceof ContatoComLinkedIn contatoComLinkedIn) {
@@ -94,18 +113,24 @@ public class Agenda {
 
     public void listarContatos() {
         if (contatos.isEmpty()) {
-            System.out.println("\nAgenda ainda não possui contato adicionado.\n");
+            System.out.println("\nAgenda ainda não possui contato adicionado.");
             return;
         }
-        System.out.println(">>>> Contatos <<<<");
+        //TODO config layout de exibição
+        System.out.println("\n>>>> Contatos <<<<");
         System.out.println("Id | Nome | Telefone | E-mail | LinkedIn");
         for (Contato c : contatos) {
             System.out.println(c);
         }
     }
 
-    public void removerContato(Scanner scanner) {
-        Contato c = buscarContato(scanner);
+    public void removerContato() {
+        if (isEmpty()) {
+            System.out.println("\nAgenda ainda não possui contato adicionado.");
+            return;
+        }
+        System.out.println("Informe o número do contato que deseja remover:");
+        Contato c = buscarContato();
         if (c != null) {
             contatos.remove(c);
             System.out.println("Contato removido com sucesso!");
@@ -114,31 +139,36 @@ public class Agenda {
         }
     }
 
-    public void acessarLinkedIn(Scanner scanner) {
-        System.out.println("Digite o telefone: ");
-        Contato c = buscarContato(scanner);
+    public void acessarLinkedIn() {
+        if (isEmpty()) {
+            System.out.println("\nAgenda ainda não possui contato adicionado.");
+            return;
+        }
+        System.out.println("Informe o número do contato que deseja acessar LinkedIn:");
+        Contato c = buscarContato();
         if (c == null) {
             System.out.println("Contato não encontrado!");
             return;
         }
-        //aqui tem que avalir isso porque parece só estar sendo criado contato com linkedin
+
         if (c instanceof ContatoComLinkedIn contatoComLinkedIn) {
             try {
-                System.out.println("Abrindo LinkedIN!");
+                System.out.println("Abrindo LinkedIn...");
                 Thread.sleep(2000);
-                Desktop.getDesktop().browse(new URI(contatoComLinkedIn.getLinkedIn().toString()));
+                String url = "https://www.linkedin.com/in/" + contatoComLinkedIn.getLinkedIn().getSlugProfile();
+                Desktop.getDesktop().browse(new URI(url));
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
-        }else {
+        } else {
             System.out.println("Contato não possui linkedin!");
         }
     }
 
-    private String leNumeroContato(Scanner scanner) {
+    private String leNumeroContato() {
         //verificação de número de caracteres e dígitos e remoção de espaço em branco
         String telefone = "";
-        while(true){
+        while (true) {
             telefone = scanner.nextLine();
             telefone = telefone.replaceAll("\\s", "");
             if (telefone.isEmpty())

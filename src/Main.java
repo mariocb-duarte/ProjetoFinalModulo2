@@ -1,17 +1,17 @@
 import java.util.Scanner;
 
+
 public class Main {
 
-    public static void main(String[] args){
-        Scanner sc = new Scanner(System.in);
+    public static void main(String[] args) {
         Agenda agenda = new Agenda();
-        Contato contato;
+        Scanner sc = new Scanner(System.in);
 
-        while (true){
-            try{
-                System.out.println("##################");
-                System.out.println("##### AGENDA #####");
-                System.out.println("##################");
+        while (true) {
+            try {
+                System.out.println("######################");
+                System.out.println("####### AGENDA #######");
+                System.out.println("######################");
                 System.out.println(">>>> Menu Contato <<<<");
                 System.out.println("1 - Adicionar Contato");
                 System.out.println("2 - Detalhar Contato");
@@ -25,24 +25,24 @@ public class Main {
                 int opcao = sc.nextInt();
                 sc.nextLine();
 
-                switch (opcao){
+                switch (opcao) {
                     case 1: //adicionar contato
-                        agenda.adicionarContato(sc);
+                        agenda.adicionarContato();
                         break;
                     case 2: //detalhar contato
-                        agenda.detalharContato(sc);
+                        agenda.detalharContato();
                         break;
                     case 3: //editar contato
-                        agenda.editarContato(sc);
+                        agenda.editarContato();
                         break;
                     case 4: //remover contato
-                        agenda.removerContato(sc);
+                        agenda.removerContato();
                         break;
                     case 5: //listar contatos
                         agenda.listarContatos();
                         break;
                     case 6: //acessar linkedin
-                        agenda.acessarLinkedIn(sc);
+                        agenda.acessarLinkedIn();
                         break;
                     case 7: //sair
                         System.out.println("Saindo...");
@@ -51,8 +51,8 @@ public class Main {
                     default:
                         System.out.println("Opção inválida. Tente novamente.");
                 }
-
-            }catch (Exception e){
+                System.out.println();
+            } catch (Exception e) {
                 System.out.println("Erro: " + e.getMessage());
             }
         }
