@@ -20,7 +20,8 @@ public class Main {
                 System.out.println("4 - Remover Contato");
                 System.out.println("5 - Listar Contatos");
                 System.out.println("6 - Acessar LinkedIn");
-                System.out.println("7 - Sair");
+                System.out.println("7 - Acessar GitHub");
+                System.out.println("8 - Sair");
                 System.out.print("Escolha uma opção: ");
 
                 try{
@@ -30,27 +31,29 @@ public class Main {
                     continue;
                 }
 
-
                 switch (opcao) {
-                    case 1: //adicionar contato
+                    case 1:
                         agenda.adicionarContato();
                         break;
-                    case 2: //detalhar contato
+                    case 2:
                         agenda.detalharContato();
                         break;
-                    case 3: //editar contato
+                    case 3:
                         agenda.editarContato();
                         break;
-                    case 4: //remover contato
+                    case 4:
                         agenda.removerContato();
                         break;
-                    case 5: //listar contatos
+                    case 5:
                         agenda.listarContatos();
                         break;
-                    case 6: //acessar linkedin
+                    case 6:
                         agenda.acessarLinkedIn();
                         break;
-                    case 7: //sair
+                    case 7:
+                        agenda.acessarGitHub();
+                        break;
+                    case 8:
                         System.out.println("Saindo...");
                         sc.close();
                         return;
@@ -62,5 +65,6 @@ public class Main {
                 System.out.println("Erro: " + e.getMessage());
             }
         }
+
     }
 }
