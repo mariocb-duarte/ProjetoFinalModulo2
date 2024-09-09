@@ -1,8 +1,8 @@
 public class ContatoComLinkedIn extends Contato {
     private LinkedIn linkedIn;
 
-    public ContatoComLinkedIn(int idContato, String nomeContato, String telefoneContato, String emailContato, LinkedIn linkedIn) {
-        super(idContato, nomeContato, telefoneContato, emailContato);
+    public ContatoComLinkedIn(String nomeContato, String telefoneContato, String emailContato, LinkedIn linkedIn) {
+        super(nomeContato, telefoneContato, emailContato);
         this.linkedIn = linkedIn;
     }
 
@@ -22,6 +22,6 @@ public class ContatoComLinkedIn extends Contato {
 
     @Override
     public String toString() {
-        return super.toString() + " | " + linkedIn.toString();
+        return super.toString() + linkedIn.toString();
     }
 }

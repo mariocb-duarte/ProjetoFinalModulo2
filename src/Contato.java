@@ -4,11 +4,14 @@ public class Contato {
     private String telefoneContato;
     private String emailContato;
 
-    public Contato(int idContato, String nomeContato, String telefoneContato, String emailContato) {
-        this.idContato = idContato;
+    public Contato(String nomeContato, String telefoneContato, String emailContato) {
         this.nomeContato = nomeContato;
         this.telefoneContato = telefoneContato;
         this.emailContato = emailContato;
+    }
+
+    public void setIdContato(int idContato){
+        this.idContato = idContato;
     }
 
     public int getIdContato() {
@@ -48,6 +51,6 @@ public class Contato {
 
     @Override
     public String toString(){
-        return idContato + " | " + nomeContato + " | " + telefoneContato + " | " + emailContato;
+        return idContato + " | " + nomeContato + " | " + telefoneContato + " | " + emailContato + " | ";
     }
 }

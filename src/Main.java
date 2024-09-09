@@ -6,6 +6,7 @@ public class Main {
     public static void main(String[] args) {
         Agenda agenda = new Agenda();
         Scanner sc = new Scanner(System.in);
+        int opcao;
 
         while (true) {
             try {
@@ -22,8 +23,13 @@ public class Main {
                 System.out.println("7 - Sair");
                 System.out.print("Escolha uma opção: ");
 
-                int opcao = sc.nextInt();
-                sc.nextLine();
+                try{
+                    opcao = Integer.parseInt(sc.nextLine());
+                } catch (Exception e) {
+                    System.out.println("\nOpção em branco! Escolha uma opção válida.\n");
+                    continue;
+                }
+
 
                 switch (opcao) {
                     case 1: //adicionar contato
@@ -49,7 +55,7 @@ public class Main {
                         sc.close();
                         return;
                     default:
-                        System.out.println("Opção inválida. Tente novamente.");
+                        System.out.println("\nOpção inválida. Tente novamente.");
                 }
                 System.out.println();
             } catch (Exception e) {

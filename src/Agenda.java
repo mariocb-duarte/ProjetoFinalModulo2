@@ -9,27 +9,32 @@ public class Agenda {
     private Scanner scanner = new Scanner(System.in);
 
     public void adicionarContato() {
-        idContato++;
-        String nome = lerEntrada("Informe o nome do contato: ");
+        String nome = lerNome();
+        if (nome.isBlank()) return;
+
         String telefone = lerNumeroContato();
         if (telefone.isBlank()) {
-            idContato--;
             return;
         }
-        String email = lerEntrada("Informe o email do contato: ");
-        String urlLinkedIn = lerEntrada("Informe o url do LinkedIn do contato: ");
-
         if (isTelefoneDuplicado(telefone)) {
             System.out.println("Telefone já cadastrado!");
-            idContato--;
             return;
         }
 
+        String email = lerEmail();
+        String urlLinkedIn = lerLinkedIn();
+
         Contato contato = urlLinkedIn.isBlank()
-                ? new Contato(idContato, nome, telefone, email)
-                : new ContatoComLinkedIn(idContato, nome, telefone, email, new LinkedIn(urlLinkedIn));
+                ? new Contato(nome, telefone, email)
+                : new ContatoComLinkedIn(nome, telefone, email, new LinkedIn(urlLinkedIn));
 
         contatos.add(contato);
+        for (int i = 0; i < contatos.size();i++){
+            if (contatos.get(i).equals(contato)){
+                contato.setIdContato(i+1);
+                break;
+            }
+        }
     }
 
     public void detalharContato() {
@@ -99,6 +104,9 @@ public class Agenda {
         if (contato != null) {
             contatos.remove(contato);
             System.out.println("Contato removido com sucesso!");
+            for (int i = 0; i < contatos.size(); i++) {
+                contatos.get(i).setIdContato(i+1);
+            }
         } else {
             System.out.println("Contato não encontrado!");
         }
@@ -125,14 +133,15 @@ public class Agenda {
 
     private String lerNumeroContato() {
         while (true) {
+            System.out.println("Informe o telefone do contato ou ENTER para cancelar: ");
             String telefone = scanner.nextLine().replaceAll("\\s", "");
             telefone = telefone.replaceAll("\\s", "");
-            if (telefone.isEmpty())
+            if (telefone.isBlank())
                 return telefone;
             else if (telefone.length() == 11 && telefone.matches("\\d{11}")) {
                 return telefone;
             } else {
-                System.out.println("Telefone inválido! Digite um telefone válido:");
+                System.out.println("Telefone inválido!");
             }
         }
     }
@@ -140,6 +149,36 @@ public class Agenda {
     private String lerEntrada(String mensagem){
         System.out.println(mensagem);
         return scanner.nextLine();
+    }
+
+    private String lerNome(){
+        System.out.println("Informe o nome do Contato (20 characters) ou ENTER para cancelar: ");
+        String name = scanner.nextLine();
+        if(name.length()>20)
+            return name.substring(0, 20);
+        return name;
+    }
+
+    private String lerEmail(){
+        //E-mail optativo
+        System.out.println("Informe o e-mail do Contato ou ENTER para continuar sem  e-mail: ");
+        String email = scanner.nextLine();
+        if (email.matches("^[\\w-.]+@([\\w-]+\\.)+[\\w-]{2,4}$") || email.isBlank()) {
+            return email;
+        }
+        System.out.println("Email inválido. Por favor, digite um email válido.");
+        return lerEmail();
+    }
+
+    private String lerLinkedIn(){
+        //LinkedIn optativo
+        System.out.println("Informe o url do LinkedIn do Contato ou ENTER para continuar sem: ");
+        String urlLinkedIn = scanner.nextLine();
+        if (urlLinkedIn.matches("^(https?:\\/\\/)?(www\\.)?linkedin\\.com\\/.*$") || urlLinkedIn.isBlank()) {
+            return urlLinkedIn;
+        }
+        System.out.println("Linkedin inválido. Por favor, digite um url de LinkedIn válido.");
+        return lerLinkedIn();
     }
 
     private boolean isTelefoneDuplicado(String telefone) {
