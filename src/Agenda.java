@@ -7,6 +7,18 @@ public class Agenda {
     ArrayList<Contato> contatos = new ArrayList<>();
     private Scanner scanner = new Scanner(System.in);
 
+    private String lerGitHub() {
+        // GitHub optativo
+        System.out.println("Informe o url do GitHub do Contato ou ENTER para continuar sem: ");
+        String urlGitHub = scanner.nextLine();
+        if (urlGitHub.matches("^(https?:\\/\\/)?(www\\.)?github\\.com\\/.*$") || urlGitHub.isBlank()) {
+            return urlGitHub;
+        }
+        System.out.println("URL do GitHub inválido. Por favor, digite uma URL de GitHub válida.");
+        return lerGitHub();
+    }
+
+
     public void adicionarContato() {
         String nome = lerNome();
         if (nome.isBlank()) return;
@@ -22,10 +34,15 @@ public class Agenda {
 
         String email = lerEmail();
         String urlLinkedIn = lerLinkedIn();
+        String urlGitHub = lerGitHub();
 
-        Contato contato = urlLinkedIn.isBlank()
+        Contato contato = urlLinkedIn.isBlank() && urlGitHub.isBlank()
                 ? new Contato(nome, telefone, email)
+                : urlLinkedIn.isBlank()
+                ? new ContatoComGitHub(nome, telefone, email, new GitHub(urlGitHub))
                 : new ContatoComLinkedIn(nome, telefone, email, new LinkedIn(urlLinkedIn));
+
+
 
         contatos.add(contato);
         for (int i = 0; i < contatos.size(); i++) {
@@ -34,7 +51,9 @@ public class Agenda {
                 break;
             }
         }
+
     }
+
 
     public void detalharContato() {
         if (isEmpty()) {
@@ -48,6 +67,7 @@ public class Agenda {
             contato.mostrarDetalhes();
         }
     }
+
 
     public void editarContato() {
         if (isEmpty()) {
@@ -82,7 +102,15 @@ public class Agenda {
                 contatoComLinkedIn.setLinkedIn(new LinkedIn(urlLinkedIn));
             }
         }
+
+        if (contato instanceof ContatoComGitHub contatoComGitHub) {
+            String urlGitHub = lerEntrada("Informe o url do GitHub do contato: ");
+            if (!urlGitHub.isBlank()) {
+                contatoComGitHub.setGitHub(new GitHub(urlGitHub));
+            }
+        }
     }
+
 
     public void listarContatos() {
         if (isEmpty()) {
@@ -90,9 +118,10 @@ public class Agenda {
             return;
         }
         System.out.println("\n>>>> Contatos <<<<");
-        System.out.println("Id | Nome | Telefone | E-mail | LinkedIn");
+        System.out.println("Id | Nome | Telefone | E-mail | LinkedIn | GitHub");
         contatos.forEach(System.out::println);
     }
+
 
     public void removerContato() {
         if (isEmpty()) {
@@ -216,4 +245,35 @@ public class Agenda {
     public boolean isEmpty() {
         return contatos.isEmpty();
     }
+
+    public void acessarGitHub() {
+        if (isEmpty()) {
+            System.out.println("\nAgenda ainda não possui contato adicionado.");
+            return;
+        }
+
+        Contato contato = buscarContatoPorTelefone();
+        if (contato == null) {
+            System.out.println("Contato não encontrado!");
+            return;
+        }
+
+        if (contato instanceof ContatoComGitHub contatoComGitHub) {
+            abrirGitHub(contatoComGitHub);
+        } else {
+            System.out.println("Contato não possui GitHub!");
+        }
+    }
+
+    private void abrirGitHub(ContatoComGitHub contatoComGitHub) {
+        try {
+            System.out.println("Abrindo GitHub...");
+            Thread.sleep(1500);
+            String urlGitHub = "https://github.com/" + contatoComGitHub.getGitHub().getSlugProfile();
+            Desktop.getDesktop().browse(new URI(urlGitHub));
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao abrir GitHub. ", e);
+        }
+    }
+
 }
